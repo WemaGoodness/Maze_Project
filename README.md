@@ -22,5 +22,5 @@ This project is a 3D maze game developed using SDL2. The game includes features 
 2. Clone the repository:
 
 ```sh
-git clone https://github.com/yourusername/maze_game.git
+git clone https://github.com/yourusername/Maze_Project.git
 cd maze_game
