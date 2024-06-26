@@ -1,6 +1,4 @@
 #include "render.h"
-#include "game.h"
-#include "map.h"
 #include <math.h>
 
 /**
@@ -29,6 +27,7 @@ void draw(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color color)
 SDL_Color apply_lighting(SDL_Color color, double distance)
 {
 	double factor = 1.0 / (0.1 * distance + 1.0);
+
 	color.r = (Uint8)(color.r * factor);
 	color.g = (Uint8)(color.g * factor);
 	color.b = (Uint8)(color.b * factor);
@@ -38,13 +37,20 @@ SDL_Color apply_lighting(SDL_Color color, double distance)
 /**
  * raycast - Performs raycasting and draws the view
  * @renderer: The SDL renderer
+ * @game: The game state
  */
-void raycast(SDL_Renderer *renderer)
+void raycast(SDL_Renderer *renderer, const Game *game)
 {
-	for (int x = 0; x < SCREEN_WIDTH; x++)
+	int x;
+	double distance;
+	SDL_Color color;
+
+	(void)game;
+
+	for (x = 0; x < SCREEN_WIDTH; x++)
 	{
-		double distance = (double)x / SCREEN_WIDTH * 20.0;
-		SDL_Color color = {255, 255, 255, 255};
+		distance = (double)x / SCREEN_WIDTH * 20.0;
+		color = (SDL_Color){255, 255, 255, 255};
 		color = apply_lighting(color, distance);
 		draw(renderer, x, 0, 1, SCREEN_HEIGHT, color);
 	}
@@ -53,18 +59,23 @@ void raycast(SDL_Renderer *renderer)
 /**
  * draw_map - Draws the map on the screen
  * @renderer: The SDL renderer
+ * @map: The map structure
+ * @game: The game state
  */
-void draw_map(SDL_Renderer *renderer)
+void draw_map(SDL_Renderer *renderer, const Map *map, const Game *game)
 {
-	for (int y = 0; y < MAP_SIZE; y++)
+	int x, y;
+	SDL_Color color;
+
+	for (y = 0; y < MAP_SIZE; y++)
 	{
-		for (int x = 0; x < MAP_SIZE; x++)
+		for (x = 0; x < MAP_SIZE; x++)
 		{
-			SDL_Color color = map[x][y] > 0 ? (SDL_Color){255, 255, 255, 255} : (SDL_Color){0, 0, 0, 255};
+			color = map->tiles[x][y] > 0 ? (SDL_Color){255, 255, 255, 255} : (SDL_Color){0, 0, 0, 255};
 			draw(renderer, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
 		}
 	}
-	draw(renderer, playerX * TILE_SIZE, playerY * TILE_SIZE, TILE_SIZE, TILE_SIZE, (SDL_Color){255, 0, 0, 255});
+	draw(renderer, game->playerX * TILE_SIZE, game->playerY * TILE_SIZE, TILE_SIZE, TILE_SIZE, (SDL_Color){255, 0, 0, 255});
 }
 
 /**
@@ -78,7 +89,6 @@ void draw_weapon(SDL_Renderer *renderer, SDL_Texture *texture)
 	int weaponHeight = 200;
 	int weaponX = (SCREEN_WIDTH - weaponWidth) / 2;
 	int weaponY = SCREEN_HEIGHT - weaponHeight - 10;
-
 	SDL_Rect rect = {weaponX, weaponY, weaponWidth, weaponHeight};
 
 	SDL_RenderCopy(renderer, texture, NULL, &rect);

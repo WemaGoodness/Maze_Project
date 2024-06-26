@@ -4,71 +4,66 @@
 #include "weather.h"
 #include "enemy.h"
 
-SDL_Texture *weaponTexture = NULL;
-bool isFiring = false;
-GameState gameState = GAME_START;
-
 /**
  * handle_input - Handles user input
  * @event: The SDL event
+ * @game: The game state
  */
-void handle_input(SDL_Event event)
+void handle_input(SDL_Event event, Game *game)
 {
 	if (event.type == SDL_KEYDOWN)
 	{
 		switch (event.key.keysym.sym)
 		{
 			case SDLK_LEFT:
-				/* Rotate camera left */
 				break;
 			case SDLK_RIGHT:
-				/* Rotate camera right */
 				break;
 			case SDLK_w:
-				keyW = true;
+				game->keyW = true;
 				break;
 			case SDLK_s:
-				keyS = true;
+				game->keyS = true;
 				break;
 			case SDLK_a:
-				keyA = true;
+				game->keyA = true;
 				break;
 			case SDLK_d:
-				keyD = true;
+				game->keyD = true;
 				break;
 			case SDLK_m:
-				toggle_map();
+				toggle_map(game);
 				break;
 			case SDLK_SPACE:
-				isFiring = true;
-				fire_weapon();
+				game->isFiring = true;
+				fire_weapon(game);
 				break;
 			case SDLK_p:
-				if (gameState == GAME_RUNNING)
+				if (game->gameState == GAME_RUNNING)
 				{
-					change_game_state(GAME_PAUSED);
+					change_game_state(game, GAME_PAUSED);
 				}
-				else if (gameState == GAME_PAUSED)
+				else if (game->gameState == GAME_PAUSED)
 				{
-					change_game_state(GAME_RUNNING);
+					change_game_state(game, GAME_RUNNING);
 				}
 				break;
 			case SDLK_r:
-				if (gameState == GAME_OVER)
+				if (game->gameState == GAME_OVER)
 				{
-					change_game_state(GAME_START);
+					change_game_state(game, GAME_START);
 				}
 				break;
 			case SDLK_RETURN:
-				if (gameState == GAME_START)
+				if (game->gameState == GAME_START)
 				{
-					change_game_state(GAME_RUNNING);
+					change_game_state(game, GAME_RUNNING);
 				}
 				break;
 			case SDLK_ESCAPE:
-				if (gameState == GAME_RUNNING)
+				if (game->gameState == GAME_RUNNING)
 				{
-					change_game_state(GAME_PAUSED);
+					change_game_state(game, GAME_PAUSED);
 				}
 				break;
 		}
@@ -78,19 +73,19 @@ void handle_input(SDL_Event event)
 		switch (event.key.keysym.sym)
 		{
 			case SDLK_w:
-				keyW = false;
+				game->keyW = false;
 				break;
 			case SDLK_s:
-				keyS = false;
+				game->keyS = false;
 				break;
 			case SDLK_a:
-				keyA = false;
+				game->keyA = false;
 				break;
 			case SDLK_d:
-				keyD = false;
+				game->keyD = false;
 				break;
 			case SDLK_SPACE:
-				isFiring = false;
+				game->isFiring = false;
 				break;
 		}
 	}
@@ -98,22 +93,26 @@ void handle_input(SDL_Event event)
 
 /**
  * update_player - Updates player position based on input
+ * @game: The game state
+ *
+ * This function updates the player's position based on the current key presses.
+ * It calls the move_player function with the appropriate deltas based on the key presses.
  */
-void update_player(void)
+void update_player(Game *game)
 {
-	if (keyW && !keyS)
+	if (game->keyW && !game->keyS)
 	{
-		move_player(dirX * 0.1, dirY * 0.1);
+		move_player(game, game->map, game->dirX * 0.1, game->dirY * 0.1);
 	}
-	else if (keyS && !keyW)
+	else if (game->keyS && !game->keyW)
 	{
-		move_player(-dirX * 0.1, -dirY * 0.1);
+		move_player(game, game->map, -game->dirX * 0.1, -game->dirY * 0.1);
 	}
-	if (keyA && !keyD)
+	if (game->keyA && !game->keyD)
 	{
 		/* Strafe camera left */
 	}
-	else if (keyD && !keyA)
+	else if (game->keyD && !game->keyA)
 	{
 		/* Strafe camera right */
 	}
@@ -121,22 +120,24 @@ void update_player(void)
 
 /**
  * toggle_map - Toggles the map display
+ * @game: The game state
  */
-void toggle_map(void)
+void toggle_map(Game *game)
 {
-	showMap = !showMap;
+	game->showMap = !game->showMap;
 }
 
 /**
  * cleanup - Cleans up SDL resources
  * @window: The SDL window
  * @renderer: The SDL renderer
+ * @game: The game state
  */
-void cleanup(SDL_Window *window, SDL_Renderer *renderer)
+void cleanup(SDL_Window *window, SDL_Renderer *renderer, Game *game)
 {
-	if (weaponTexture)
+	if (game->weaponTexture)
 	{
-		SDL_DestroyTexture(weaponTexture);
+		SDL_DestroyTexture(game->weaponTexture);
 	}
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
@@ -145,29 +146,36 @@ void cleanup(SDL_Window *window, SDL_Renderer *renderer)
 
 /**
  * fire_weapon - Simulates firing the weapon
+ * @game: The game state
+ *
+ * This function simulates firing the weapon by printing a message to the console.
+ * It also sets the isFiring flag to true.
  */
-void fire_weapon(void)
+void fire_weapon(Game *game)
 {
-	// Placeholder for weapon firing logic
+	game->isFiring = true;
+
 	printf("Weapon fired!\n");
 }
 
 /**
  * update_weapon - Updates the weapon state (animation, etc.)
+ * @game: The game state
  */
-void update_weapon(void)
+void update_weapon(Game *game)
 {
-	if (isFiring)
+	if (game->isFiring)
 	{
-		// Placeholder for weapon animation update
+		/* Placeholder for weapon animation update */
 	}
 }
 
 /**
  * change_game_state - Changes the current game state
+ * @game: The game state
  * @newState: The new game state
  */
-void change_game_state(GameState newState)
+void change_game_state(Game *game, GameState newState)
 {
-	gameState = newState;
+	game->gameState = newState;
 }

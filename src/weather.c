@@ -2,69 +2,62 @@
 #include "game.h"
 #include <stdlib.h>
 
-Particle particles[MAX_PARTICLES];
-bool rainActive = false;
-
 /**
- * init_particles - Initializes the particles for rain
+ * init_particles - Initializes particles for weather effects
+ * @weather: The weather structure
  */
-void init_particles(void)
+void init_particles(Weather *weather)
 {
-    for (int i = 0; i < MAX_PARTICLES; i++)
-    {
-        particles[i].x = rand() % SCREEN_WIDTH;
-        particles[i].y = rand() % SCREEN_HEIGHT;
-        particles[i].speed = 2 + rand() % 5;
-    }
+	int i;
+
+	for (i = 0; i < MAX_PARTICLES; i++)
+	{
+		weather->particles[i].x = rand() % SCREEN_WIDTH;
+		weather->particles[i].y = rand() % SCREEN_HEIGHT;
+		weather->particles[i].speed = (rand() % 5 + 1) / 10.0;
+	}
 }
 
 /**
- * update_particles - Updates the positions of the particles
+ * update_particles - Updates the position of particles
+ * @weather: The weather structure
  */
-void update_particles(void)
+void update_particles(Weather *weather)
 {
-    if (!rainActive)
-    {
-        return;
-    }
+	int i;
 
-    for (int i = 0; i < MAX_PARTICLES; i++)
-    {
-        particles[i].y += particles[i].speed;
-        if (particles[i].y > SCREEN_HEIGHT)
-        {
-            particles[i].x = rand() % SCREEN_WIDTH;
-            particles[i].y = 0;
-        }
-    }
+	for (i = 0; i < MAX_PARTICLES; i++)
+	{
+		weather->particles[i].y += weather->particles[i].speed;
+		if (weather->particles[i].y > SCREEN_HEIGHT)
+		{
+			weather->particles[i].y = 0;
+			weather->particles[i].x = rand() % SCREEN_WIDTH;
+		}
+	}
 }
 
 /**
- * render_particles - Renders the particles on the screen
+ * render_particles - Renders particles on the screen
+ * @weather: The weather structure
  * @renderer: The SDL renderer
  */
-void render_particles(SDL_Renderer *renderer)
+void render_particles(Weather *weather, SDL_Renderer *renderer)
 {
-    if (!rainActive)
-    {
-        return;
-    }
+	int i;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    for (int i = 0; i < MAX_PARTICLES; i++)
-    {
-        SDL_RenderDrawPoint(renderer, (int)particles[i].x, (int)particles[i].y);
-    }
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	for (i = 0; i < MAX_PARTICLES; i++)
+	{
+		SDL_RenderDrawPoint(renderer, weather->particles[i].x, weather->particles[i].y);
+	}
 }
 
 /**
- * toggle_rain - Toggles the rain effect
+ * toggle_rain - Toggles rain effect on or off
+ * @weather: The weather structure
  */
-void toggle_rain(void)
+void toggle_rain(Weather *weather)
 {
-    rainActive = !rainActive;
-    if (rainActive)
-    {
-        init_particles();
-    }
+	weather->rainActive = !weather->rainActive;
 }

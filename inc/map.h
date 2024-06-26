@@ -6,9 +6,16 @@
 
 #define MAP_SIZE 10
 
-extern int map[MAP_SIZE][MAP_SIZE];
+/**
+ * struct Map - Represents the map of the game
+ * @tiles: 2D array representing the tiles of the map
+ */
+typedef struct Map
+{
+	int tiles[MAP_SIZE][MAP_SIZE];
+} Map;
 
-void load_map(const char *filename);
-bool is_wall(double x, double y);
+void load_map(const char *filename, Map *map);
+bool is_wall(const Map *map, double x, double y);
 
 #endif

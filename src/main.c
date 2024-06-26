@@ -6,11 +6,6 @@
 #include "enemy.h"
 #include "weather.h"
 
-int map[MAP_SIZE][MAP_SIZE];
-double playerX = 3.5, playerY = 3.5, dirX = -1, dirY = 0;
-bool showMap = true, keyW = false, keyA = false, keyS = false, keyD = false, isFiring = false, rainActive = false;
-GameState gameState = GAME_START;
-
 /**
  * main - Entry point of the game
  * @argc: Argument count
@@ -20,21 +15,31 @@ GameState gameState = GAME_START;
  */
 int main(int argc, char *argv[])
 {
+	SDL_Window *window;
+	SDL_Renderer *renderer;
+	Game game;
+	EnemyManager enemyManager;
+	Weather weather;
+	Map map;
+	SDL_Event event;
+	bool running = true;
+
 	if (argc < 2)
 	{
 		printf("Usage: %s <mapfile>\n", argv[0]);
 		return (1);
 	}
 
-	load_map(argv[1]);
+	load_map(argv[1], &map);
+	game.map = &map;
 
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		printf("SDL_Init Error: %s\n", SDL_GetError());
-		return (1);
-	}
+		if (SDL_Init(SDL_INIT_VIDEO) != 0)
+		{
+			printf("SDL_Init Error: %s\n", SDL_GetError());
+			return (1);
+		}
 
-	SDL_Window *window = SDL_CreateWindow("3D Maze",
+	window = SDL_CreateWindow("3D Maze",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			SCREEN_WIDTH,
@@ -47,7 +52,7 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (!renderer)
 	{
 		SDL_DestroyWindow(window);
@@ -56,34 +61,46 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
-	init_enemies();
-	init_particles();
+	game.playerX = 3.5;
+	game.playerY = 3.5;
+	game.dirX = -1;
+	game.dirY = 0;
+	game.showMap = true;
+	game.keyW = false;
+	game.keyA = false;
+	game.keyS = false;
+	game.keyD = false;
+	game.isFiring = false;
+	game.rainActive = false;
+	game.weaponTexture = NULL;
+	game.gameState = GAME_START;
 
-	bool running = true;
+	init_enemies(&enemyManager);
+	init_particles(&weather);
+
 	while (running)
 	{
-		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT)
 			{
 				running = false;
 			}
-			handle_input(event);
+			handle_input(event, &game);
 		}
 
-		if (gameState == GAME_RUNNING)
+		if (game.gameState == GAME_RUNNING)
 		{
-			update_player();
-			update_weapon();
-			update_enemies();
-			update_particles();
+			update_player(&game);
+			update_weapon(&game);
+			update_enemies(&enemyManager, game.playerX, game.playerY, game.map);
+			update_particles(&weather);
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		if (gameState == GAME_START)
+		if (game.gameState == GAME_START)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawLine(renderer, SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2,
@@ -91,18 +108,18 @@ int main(int argc, char *argv[])
 			SDL_RenderDrawLine(renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50,
 					SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 50);
 		}
-		else if (gameState == GAME_RUNNING)
+		else if (game.gameState == GAME_RUNNING)
 		{
-			raycast(renderer);
-			if (showMap)
+			raycast(renderer, &game);
+			if (game.showMap)
 			{
-				draw_map(renderer);
+				draw_map(renderer, &map, &game);
 			}
-			render_enemies(renderer);
-			render_particles(renderer);
-			draw_weapon(renderer, weaponTexture);
+			render_enemies(&enemyManager, renderer);
+			render_particles(&weather, renderer);
+			draw_weapon(renderer, game.weaponTexture);
 		}
-		else if (gameState == GAME_PAUSED)
+		else if (game.gameState == GAME_PAUSED)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawLine(renderer, SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2,
@@ -110,7 +127,7 @@ int main(int argc, char *argv[])
 			SDL_RenderDrawLine(renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50,
 					SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 50);
 		}
-		else if (gameState == GAME_OVER)
+		else if (game.gameState == GAME_OVER)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 			SDL_RenderDrawLine(renderer, SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2,
@@ -122,6 +139,6 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 	}
 
-	cleanup(window, renderer);
+	cleanup(window, renderer, &game);
 	return (0);
 }
