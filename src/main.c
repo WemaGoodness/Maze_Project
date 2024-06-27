@@ -15,8 +15,8 @@
  */
 int main(int argc, char *argv[])
 {
-	SDL_Window *window;
-	SDL_Renderer *renderer;
+	SDL_Window *window = NULL;
+	SDL_Renderer *renderer = NULL;
 	Game game;
 	EnemyManager enemyManager;
 	Weather weather;
@@ -27,29 +27,24 @@ int main(int argc, char *argv[])
 	if (argc < 2)
 	{
 		printf("Usage: %s <mapfile>\n", argv[0]);
-		return (1);
+		return 1;
 	}
 
 	load_map(argv[1], &map);
 	game.map = &map;
 
-		if (SDL_Init(SDL_INIT_VIDEO) != 0)
-		{
-			printf("SDL_Init Error: %s\n", SDL_GetError());
-			return (1);
-		}
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		printf("SDL_Init Error: %s\n", SDL_GetError());
+		return 1;
+	}
 
-	window = SDL_CreateWindow("3D Maze",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			SCREEN_WIDTH,
-			SCREEN_HEIGHT,
-			0);
+	window = SDL_CreateWindow("3D Maze", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	if (!window)
 	{
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
 		SDL_Quit();
-		return (1);
+		return 1;
 	}
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -58,7 +53,7 @@ int main(int argc, char *argv[])
 		SDL_DestroyWindow(window);
 		printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
 		SDL_Quit();
-		return (1);
+		return 1;
 	}
 
 	game.playerX = 3.5;
@@ -73,10 +68,12 @@ int main(int argc, char *argv[])
 	game.isFiring = false;
 	game.rainActive = false;
 	game.weaponTexture = NULL;
-	game.gameState = GAME_START;
+	game.gameState = GAME_RUNNING;
 
 	init_enemies(&enemyManager);
 	init_particles(&weather);
+
+	printf("Initialization complete. Entering main loop.\n");
 
 	while (running)
 	{
@@ -139,6 +136,9 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 	}
 
+	printf("Exiting main loop.\n");
+
 	cleanup(window, renderer, &game);
-	return (0);
+	return 0;
 }
+
