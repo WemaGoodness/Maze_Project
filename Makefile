@@ -1,33 +1,28 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=c99
-LDFLAGS = -lSDL2 -lm
+LDFLAGS = -lSDL2 -lSDL2_image -lm
 
-SRC_DIR = src
-INC_DIR = inc
-OBJ_DIR = obj
+SRCDIR = src
+INCDIR = inc
+OBJDIR = obj
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+OBJECTS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SOURCES))
+EXECUTABLE = maze
 
-TARGET = maze_game
+all: $(OBJDIR) $(EXECUTABLE)
 
-.PHONY: all clean fclean re
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
-all: $(TARGET)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/maze.h $(INCDIR)/weather.h
+	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -f $(OBJDIR)/*.o
+	rm -f $(EXECUTABLE)
 
-fclean: clean
-	rm -f $(TARGET)
-
-re: fclean all
+.PHONY: all clean

@@ -1,26 +1,41 @@
-# 3D Maze Game with SDL2
+# Maze Game Project
 
-This project is a 3D maze game developed using SDL2. The game includes features like player movement, enemies, weapon firing, weather effects, and different game states (start, running, pause, game over).
+## Description
+
+This project is a 3D maze game implemented using SDL2. The game involves navigating a player through a maze, avoiding or confronting enemies, and experiencing dynamic weather effects such as rain.
+
+## Controls
+
+- **W**: Move forward
+- **A**: Move left
+- **S**: Move backward
+- **D**: Move right
+- **Mouse**: Look around
+- **Shift**: Hold to move twice as fast
+- **M**: Toggle the full-screen map on/off
+- **Escape**: Quit the game
 
 ## Features
 
-- Player movement and controls
-- Simple AI for enemies
-- Weapon firing logic
-- Weather effects (rain)
-- Lighting effects
-- Different game states (start, running, pause, game over)
-
-## Requirements
-
-- SDL2 library
+- **Raycasting**: The game uses a raycasting technique to render the 3D maze.
+- **Enemies**: Simple AI enemies that follow the player.
+- **Weather Effects**: Dynamic rain particles enhance the game environment.
 
 ## Installation
 
-1. Install SDL2 library on your system. You can follow the instructions from [SDL2 Installation](https://wiki.libsdl.org/SDL2/Installation).
+To compile the game, ensure you have `SDL2` installed. Then run:
 
-2. Clone the repository:
+```bash
+make
 
-```sh
-git clone https://github.com/yourusername/Maze_Project.git
-cd maze_game
+## Running the game
+
+To run the game, use:
+
+```bash
+./maze_game <path_to_map_file>
+
+Example:
+
+```bash
+./maze_game map.txt

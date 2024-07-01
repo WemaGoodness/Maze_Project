@@ -1,5 +1,5 @@
 #include "weather.h"
-#include "game.h"
+#include "maze.h"
 #include <stdlib.h>
 
 /**
