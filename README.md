@@ -82,7 +82,9 @@ brew install sdl2_image
 - [SDL2 tutorials: Lazy Foo’ Productions](https://lazyfoo.net/tutorials/SDL/index.php)
 
 ## Screenshots
-
+![First Screenshot](/pics/Screenshot_1.png)
+![Second Screenshot](/pics/Screenshot_2.png)
+![Third Screenshot](/pics/Screenshot_3.png)
 
 ## Landing page
 - [3D Maze Game Project]()
