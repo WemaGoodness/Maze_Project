@@ -1,15 +1,15 @@
 # 3D Maze Game Project
 
 ## Table of Contents
-1. [Description](#description)
-2. [Controls](#controls)
-3. [Features](#features)
-4. [Non-Deployed Actions](#non-deployed-actions)
-5. [Installation](#installation)
-6. [Running the Game](#running-the-game)
-7. [Resources](#resources)
-8. [References](#references)
-9. [Landing Page](#landing-page)
+1. [Description](##description)
+2. [Controls](##controls)
+3. [Features](##features)
+4. [Non-Deployed Actions](##non-deployed-actions)
+5. [Installation](##installation)
+6. [Running the Game](##running-the-game)
+7. [Resources](##resources)
+8. [References](##references)
+9. [Landing Page](##landing-page)
 
 ## Description
 
@@ -48,13 +48,13 @@ To compile the game, ensure you have `SDL2` installed. Then run:
 
 ```bash
 make all
-
+```
 ## Running The Game
 
 To run the game use:
 ```bash
 ./maze
-
+```
 ## Resources
 
 To install SDL2 resources on different platforms, follow the instructions below:
@@ -63,7 +63,7 @@ Linux Terminal:
 ```bash
 sudo apt-get install libsdl2-dev
 sudo apt-get install libsdl2-image-dev
-
+```
 Windows:
 Download the SDL2 development libraries from the SDL website, and follow the instructions provided in the downloaded package.
 
@@ -71,5 +71,12 @@ Mac:
 ```bash
 brew install sdl2
 brew install sdl2_image
+```
+
+## References
+
+- [Raycasting](https://lodev.org/cgtutor/raycasting.html)
+- [Ray-Casting Tutorial](https://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/)
+- [SDL2 tutorials: Lazy Foo’ Productions](https://lazyfoo.net/tutorials/SDL/index.php)
 
 
