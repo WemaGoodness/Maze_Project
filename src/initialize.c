@@ -101,6 +101,8 @@ void initialize(Game *game)
 			SCREEN_HEIGHT,
 			SDL_WINDOW_SHOWN);
 
+	/*game->minimap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0);*/
+
 	if (!game->window)
 	{
 		fprintf(stderr, "Could not create window: %s\n", SDL_GetError());

@@ -64,6 +64,11 @@ int main(void)
 		handleInput(&game, &weather);
 		update(&weather);
 		render(&game, &weather);
+		/*drawMinimap(&game);
+
+		SDL_Rect minimapRect = {0, 0, MINIMAP_WIDTH, MINIMAP_HEIGHT};
+		SDL_BlitSurface(game.minimap, NULL, SDL_GetWindowSurface(game.window), &minimapRect);
+		SDL_UpdateWindowSurface(game.window);*/
 	}
 
 	cleanup(&game);

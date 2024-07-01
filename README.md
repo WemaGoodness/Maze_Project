@@ -9,7 +9,8 @@
 6. [Running the Game](#running-the-game)
 7. [Resources](#resources)
 8. [References](#references)
-9. [Landing Page](#landing-page)
+9. [Screenshots](#screenshots)
+10. [Landing Page](#landing-page)
 
 ## Description
 
@@ -80,4 +81,8 @@ brew install sdl2_image
 - [Ray-Casting Tutorial](https://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/)
 - [SDL2 tutorials: Lazy Foo’ Productions](https://lazyfoo.net/tutorials/SDL/index.php)
 
+## Screenshots
 
+
+## Landing page
+- [3D Maze Game Project]()
