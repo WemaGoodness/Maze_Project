@@ -87,4 +87,4 @@ brew install sdl2_image
 ![Third Screenshot](/pics/Screenshot_3.png)
 
 ## Landing page
-- [3D Maze Game Project]()
+- [3D Maze Game Project](https://goodnesswema20.wixsite.com/3d-maze-game-project)
