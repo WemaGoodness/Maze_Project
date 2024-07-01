@@ -1,15 +1,15 @@
 # 3D Maze Game Project
 
 ## Table of Contents
-1. [Description](##description)
-2. [Controls](##controls)
-3. [Features](##features)
-4. [Non-Deployed Actions](##non-deployed-actions)
-5. [Installation](##installation)
-6. [Running the Game](##running-the-game)
-7. [Resources](##resources)
-8. [References](##references)
-9. [Landing Page](##landing-page)
+1. [Description](#description)
+2. [Controls](#controls)
+3. [Features](#features)
+4. [Non-Deployed Actions](#non-deployed-actions)
+5. [Installation](#installation)
+6. [Running the Game](#running-the-game)
+7. [Resources](#resources)
+8. [References](#references)
+9. [Landing Page](#landing-page)
 
 ## Description
 
@@ -65,8 +65,9 @@ sudo apt-get install libsdl2-dev
 sudo apt-get install libsdl2-image-dev
 ```
 Windows:
+```bash
 Download the SDL2 development libraries from the SDL website, and follow the instructions provided in the downloaded package.
-
+```
 Mac:
 ```bash
 brew install sdl2
