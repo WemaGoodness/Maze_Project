@@ -10,13 +10,13 @@
  */
 void loadImage(SDL_Surface** texture, unsigned long* tw, unsigned long* th, const char* path)
 {
-	*texture = IMG_Load(path);
+	*texture = IMG_Load(path); /* Load the image from the given path */
 	if (*texture == NULL) {
-		fprintf(stderr, "Unable to load image %s! SDL_image Error: %s\n", path, IMG_GetError());
-		exit(1);
+		fprintf(stderr, "Unable to load image %s! SDL_image Error: %s\n", path, IMG_GetError()); /* Print error if loading fails */
+		exit(1); /* Exit the program */
 	}
-	*tw = (*texture)->w;
-	*th = (*texture)->h;
+	*tw = (*texture)->w; /* Get the width of the texture */
+	*th = (*texture)->h; /* Get the height of the texture */
 }
 
 /**
@@ -25,28 +25,28 @@ void loadImage(SDL_Surface** texture, unsigned long* tw, unsigned long* th, cons
  */
 void loadTextures(Game *game)
 {
-	int texWidth = 64, texHeight = 64;
+	int texWidth = 64, texHeight = 64; /* Set texture dimensions */
 	for (int i = 0; i < NUM_TEXTURES; i++)
 	{
-		game->textures[i] = SDL_CreateRGBSurface(0, texWidth, texHeight, 32, 0, 0, 0, 0);
+		game->textures[i] = SDL_CreateRGBSurface(0, texWidth, texHeight, 32, 0, 0, 0, 0); /* Create an RGB surface for the texture */
 		if (!game->textures[i])
 		{
-			fprintf(stderr, "Could not create texture: %s\n", SDL_GetError());
-			cleanup(game);
-			exit(1);
+			fprintf(stderr, "Could not create texture: %s\n", SDL_GetError()); /* Print error if texture creation fails */
+			cleanup(game); /* Clean up game resources */
+			exit(1); /* Exit the program */
 		}
-		Uint32* pixels = (Uint32*)game->textures[i]->pixels;
+		Uint32* pixels = (Uint32*)game->textures[i]->pixels; /* Get the pixel data of the texture */
 		for (int x = 0; x < texWidth; x++)
 		{
 			for (int y = 0; y < texHeight; y++)
 			{
-				int xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight);
-				int ycolor = y * 256 / texHeight;
-				int xycolor = y * 128 / texHeight + x * 128 / texWidth;
+				int xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight); /* Calculate XOR color */
+				int ycolor = y * 256 / texHeight; /* Calculate Y color */
+				int xycolor = y * 128 / texHeight + x * 128 / texWidth; /* Calculate XY color */
 				switch (i)
 				{
 					case 0:
-						pixels[texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y);
+						pixels[texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y); /* Assign color to pixel */
 						break;
 					case 1:
 						pixels[texWidth * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
@@ -81,16 +81,16 @@ void loadTextures(Game *game)
  */
 void initialize(Game *game)
 {
-	int imgFlags = IMG_INIT_PNG;
+	int imgFlags = IMG_INIT_PNG; /* Set the image initialization flags */
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
-		fprintf(stderr, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-		exit(1);
+		fprintf(stderr, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError()); /* Print error if image initialization fails */
+		exit(1); /* Exit the program */
 	}
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
+		fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError()); /* Print error if SDL initialization fails */
 		exit(1);
 	}
 
@@ -99,18 +99,18 @@ void initialize(Game *game)
 			SDL_WINDOWPOS_CENTERED,
 			SCREEN_WIDTH,
 			SCREEN_HEIGHT,
-			SDL_WINDOW_SHOWN);
+			SDL_WINDOW_SHOWN); /* Create the game window */
 
 	/*game->minimap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0);*/
 
 	if (!game->window)
 	{
-		fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
+		fprintf(stderr, "Could not create window: %s\n", SDL_GetError()); /* Print error if window creation fails */
 		SDL_Quit();
 		exit(1);
 	}
 
-	game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
+	game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED); /* Create the renderer */
 
 	if (!game->renderer)
 	{
@@ -124,7 +124,7 @@ void initialize(Game *game)
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_STREAMING,
 			SCREEN_WIDTH,
-			SCREEN_HEIGHT);
+			SCREEN_HEIGHT); /* Create the texture */
 
 	if (!game->texture)
 	{
@@ -135,6 +135,7 @@ void initialize(Game *game)
 		exit(1);
 	}
 
+	/*Load image textures*/
 	unsigned long tw, th;
 	loadImage(&game->textures[0], &tw, &th, "pics/eagle.png");
 	loadImage(&game->textures[1], &tw, &th, "pics/redbrick.png");

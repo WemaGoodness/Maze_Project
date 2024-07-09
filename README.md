@@ -88,3 +88,12 @@ brew install sdl2_image
 
 ## Landing page
 - [3D Maze Game Project](https://goodnesswema20.wixsite.com/3d-maze-game-project)
+
+## Author Profiles
+- [LinkedIn Profile](www.linkedin.com/in/wema-goodness)
+- [X Profile](https://x.com/goodness_w18524)
+
+## Blog
+[This article will provide a comprehensive overview of the project’s objectives, the development process, the challenges encountered, and the final outcome. #gamedevelopment #Cprogramming #raycasting #rendering #SDL2 #softwaredevelopment #softwareengineering](https://www.linkedin.com/pulse/developing-3d-maze-game-utilizing-ray-casting-sdl2-c-wema-goodness-dmmdf/?trackingId=msumUYaiRLupFiwalNTZVA%3D%3D)
+
+
